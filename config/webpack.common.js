@@ -9,6 +9,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+// const AsyncChunkNames = require("webpack-async-chunk-names-plugin");
 
 module.exports = {
   entry: {
@@ -30,8 +31,23 @@ module.exports = {
     }),
     new CleanWebpackPlugin(['dist'], {
       root: path.resolve(__dirname, '../')
-    })
+    }),
+    // new AsyncChunkNames()
   ],
+  optimization:{
+    splitChunks: {
+      cacheGroups:{
+        common: {
+          name: "common",
+          minChunks: 1,
+          chunks: "async",
+          priority: 10,
+          minSize:3000,
+          reuseExistingChunk: true,
+        }
+      }
+    }
+  },
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, '../dist')
